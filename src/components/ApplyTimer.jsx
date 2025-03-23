@@ -1,0 +1,66 @@
+import he from 'he';
+import axios from 'axios';
+import CraftInTimeAPI from '../backendconfig';
+import { useForm } from "react-hook-form";
+import { useAtom } from 'jotai';
+import { showDetailAtom } from '../atoms/showDetailAtom';
+import { projectAtom } from '../atoms/projectAtom';
+
+export const ApplyTimer = ({ setStopTimer, setStartTimer, date}) => {
+    const [showDetail, setShowDetail] = useAtom(showDetailAtom);
+    const [project, setProject] = useAtom(projectAtom);
+    const {handleSubmit, register}= useForm();
+    
+    const onSubmit = async (data) => {
+        setStopTimer(false);
+        setStartTimer(false);
+        
+        const dataToSend = {
+            timestamp: Number(data.date),
+            projectID: Number(data.projectId),
+            taskId: Number(data.taskId),
+          };
+          
+          try{ 
+            await axios.post(`${CraftInTimeAPI}/Project/stopTimer/${dataToSend.projectId}/${dataToSend.taskId}`,
+              dataToSend,
+               {headers: {"Content-Type": "application/json",}}
+              )
+          .then(response => {      
+            setProject((prev) => ({
+              ...prev,
+              totalWorkingTime: response.data // Replace existing 
+          }));
+
+          })
+          .catch(error=>{
+            console.log(error)
+          }).finally(()=>{
+              // setShowDetail(true);
+          })}
+          catch (e) {
+            console.log(e);
+          }
+
+    }
+    
+    
+    let tasks = project.tasks.filter(t=> !t.isDeleted);
+    return (
+        <form id="chooseTaskForm" onSubmit={handleSubmit(onSubmit)}>
+            <input type="hidden" name="date" value={date} {...register('date')}/>
+            <input type="hidden" name="projectId" value={project.projectId} {...register('projectId')} />
+            <p>If the timer applies to a particular task, pick the right one here</p>
+            <label htmlFor="0">Apply to project
+                <input type="radio" id="task-0" name="appliedToTask" defaultChecked value="0" {...register('taskId')}/>
+            </label>
+            {tasks.map(t=> (
+                <label key={`label-${t.taskId}`} htmlFor={`task-${t.taskId}`}>{he.decode(t.name)}
+                    <input  type="radio" id={`task-${t.taskId}`} name="appliedToTask" value={t.taskId} {...register('taskId')} />
+                </label>
+            ))}
+      
+            <button>Apply</button>
+        </form>       
+    )
+}
