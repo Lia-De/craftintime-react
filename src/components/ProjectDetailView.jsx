@@ -7,6 +7,7 @@ import axios from 'axios';
 import { ApplyTimer } from './ApplyTimer';
 import { formatTimeSpan, formatDateTime } from '../components/FormatData';
 import { AddTagToProject, AddTagToTask } from './AddTagToItems';
+import { EditProject } from './EditProject';
 
 
 
@@ -17,6 +18,8 @@ const [timer, setTimer] = useState(false);
 const [startTimer, setStartTimer] = useState(false);
 const [stopTimer, setStopTimer] = useState(false);
 const [stopDate, setStopDate] = useState(null);
+const [editing, setEditing] = useState(false);
+const [editingTask, setEditingTask] = useState(false);
 
 
 // Load in the project from the back-end, ensure it loads before rendering. Also check if it has a timer running.
@@ -66,6 +69,9 @@ function toggleTimer(){
         });
     }    
 }
+function toggleEditProject(){
+    setEditing(!editing);
+}
 
 
     if (loading) return <div className="header"><h2 id="nowShowing">Loading project ...</h2></div>;
@@ -73,7 +79,7 @@ function toggleTimer(){
     return (
         <>
         <div className="header">
-            <button className="editButton"></button>
+            <button className="editButton" onClick={toggleEditProject}></button>
             <h2 id="nowShowing">{he.decode(project.name)}</h2>
             <div id="projectTimers">
                 {project.status === 3 ? '':<button id="timerStart" className={timer? 'running': ''} onClick={toggleTimer}>Start</button>}
@@ -82,6 +88,7 @@ function toggleTimer(){
         </div>
         <div id="contents">
         <div id={`detail-${project?.projectId}`}>
+            {editing && <EditProject setEditing={setEditing} />}
             
             <div className="header">
                 <p className={`status${project?.status}`}>{statusLabels[project?.status] || ""}</p>
@@ -114,7 +121,7 @@ function toggleTimer(){
                     {task.deadline? <p className="deadline">{formatDateTime(task.deadline)}</p> : <p className="noDeadline" onClick={() => setDeadline(task.taskId)}></p>}
                 </div>
                 <p className="totalTime">{formatTimeSpan(task.timeSpent)}</p>
-                {task.description.split('\n').map((line,i) => <p key={i}>{he.decode(line).replace('<br>','')}</p>)}
+                {task.description.split('\n')?.map((line,i) => <p key={i}>{he.decode(line).replace('<br>','')}</p>)}
                 
                 <div className="tagsList">
                     <ul className="tagsList">

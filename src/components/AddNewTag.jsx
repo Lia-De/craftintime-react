@@ -12,9 +12,7 @@ export const AddNewTag = ( ) => {
     const [newTag, setNewTag] = useState(null);
 
     const onSubmit = (data) => {
-        console.log(data);
         let tmp = {"name": data.name};
-        console.log(tmp)
         setNewTag(tmp);
         reset();
     };
@@ -22,7 +20,7 @@ export const AddNewTag = ( ) => {
     useEffect(()=> {
         newTag && axios.post('/api/Tag/addTag', newTag)
         .then(response => {
-            console.log(response.data);
+            
             setTagList(prev =>( [...prev, response.data] ));
         }).catch(e => console.log(e));
 

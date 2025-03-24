@@ -15,7 +15,6 @@ export const AddNewItemForm = ({setAddItemForm, setProject, setShowProject}) => 
     // When the user submits the form - send new user to backend
     useEffect(()=> {
         if (newProject!= null) {
-            console.log(newProject);
             newProject && axios.post(`/api/Project/addProject`, newProject, {
                 headers: {
                     "Content-Type": "application/json",

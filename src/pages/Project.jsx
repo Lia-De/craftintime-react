@@ -8,6 +8,7 @@ import { ProjectDetailView } from '../components/ProjectDetailView';
 import { showDetailAtom } from '../atoms/showDetailAtom';
 import { AddNewItemForm } from '../components/AddNewItemForm';
 import { formatTimeSpan } from '../components/FormatData';
+import { DeleteProject } from '../components/DeleteDBITem';
 
 
 
@@ -17,6 +18,7 @@ const [projectList, setProjectList] = useAtom(projectListAtom);
 const [project, setProject] = useAtom(projectAtom);
 const [showProject, setShowProject] = useAtom(showDetailAtom);
 const [addItemForm, setAddItemForm] = useState(false);
+const [serverError, setServerError] = useState(false);
 
 // On load, fetch all projects. 
 // If we get sent here from tags (showProject is true) - then we want to display one project
@@ -30,6 +32,10 @@ useEffect(() => {
                 })
                 .catch(error => {
                     console.log(error);
+                    if (error.status ===500 ){
+                        setServerError(true);
+                    }
+                    
                 });
             }
     }, [showProject]);
@@ -52,12 +58,15 @@ useEffect(() => {
     }
   
 
-    if (showProject) {
-         return (
-            
-             <ProjectDetailView />
-            
+    if (serverError) {
+        return (
+        <div className="header">
+             <h2 id="nowShowing">Server unreachable</h2>
+        </div>
         )
+    }
+    if (showProject) {
+             return <ProjectDetailView />
     } else {
     return (
         <>
@@ -75,7 +84,8 @@ useEffect(() => {
                         <p className={`status${item.status}`}>{statusLabels[project?.status] || ""}</p>
                         <h3>{item.name}</h3><p className={item.hasTimerRunning? "totalTime runningTimer":"totalTime"}>{formatTimeSpan(item.totalWorkingTime)}</p>
                     </div>
-                    <div  className="delete"><button className="deleteButton" aria-label={`Delete project ${item.name}`}></button></div>
+                    {/* <div  className="delete"><button className="deleteButton" aria-label={`Delete project ${item.name}`}></button></div> */}
+                    <DeleteProject projectToDelete={item} />
              </div>
              ))}
         </div>

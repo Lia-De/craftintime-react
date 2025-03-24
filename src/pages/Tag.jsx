@@ -7,7 +7,7 @@ import axios from "axios";
 import { projectAtom } from "../atoms/projectAtom";
 import { showDetailAtom } from "../atoms/showDetailAtom";
 import { AddNewTag } from "../components/AddNewTag";
-import { DeleteTag } from "../components/DeleteTag";
+import { DeleteTag } from "../components/DeleteDBITem";
 
 export function Tag(){
 
@@ -54,7 +54,6 @@ function goToProject(proj){
             <div className="header">
                 <button className="editButton"></button>
                 <h2 id="nowShowing">{tag.name}</h2>
-                {/* <button id="closeButton" onClick={() => setShowTag(false) }>Back to list</button> */}
             </div>
             <div id="contents">               
                 <div id={`detail-${tag.tagId}`}>
