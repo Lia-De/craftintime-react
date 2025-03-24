@@ -1,11 +1,10 @@
 
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import CraftInTimeAPI from '../backendconfig';
 import axios from 'axios';
 
 export const AddNewItemForm = ({setAddItemForm, setProject, setShowProject}) => {
-    const { register, handleSubmit, reset } = useForm();
+    const { register, handleSubmit, reset, formState:{errors} } = useForm();
     const [newProject, setNewProject] = useState(null);
 
     const onSubmit = (data) => {
@@ -17,7 +16,7 @@ export const AddNewItemForm = ({setAddItemForm, setProject, setShowProject}) => 
     useEffect(()=> {
         if (newProject!= null) {
             console.log(newProject);
-            newProject && axios.post(`${CraftInTimeAPI}/Project/addProject`, newProject, {
+            newProject && axios.post(`/api/Project/addProject`, newProject, {
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -38,7 +37,9 @@ return (<>
         <h4>Add project</h4>
         <form id="addProject" onSubmit={handleSubmit(onSubmit)}>
             <label htmlFor="name">Project name:</label>
-            <input type="text" id="newName" name="name" {...register('name')} />
+            <input 
+                placeholder={errors.name&&'Projects must have a name'} 
+                type="text" id="newName" name="name" {...register('name', {required:true})} />
             <label htmlFor="description">Description</label>
             <input id="description" name="description" type="text" {...register('description')} />
             <button>Add</button>

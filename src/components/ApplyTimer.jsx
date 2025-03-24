@@ -1,6 +1,5 @@
 import he from 'he';
 import axios from 'axios';
-import CraftInTimeAPI from '../backendconfig';
 import { useForm } from "react-hook-form";
 import { useAtom } from 'jotai';
 import { showDetailAtom } from '../atoms/showDetailAtom';
@@ -22,7 +21,7 @@ export const ApplyTimer = ({ setStopTimer, setStartTimer, date}) => {
           };
           
           try{ 
-            await axios.post(`${CraftInTimeAPI}/Project/stopTimer/${dataToSend.projectId}/${dataToSend.taskId}`,
+            await axios.post(`/api/Project/stopTimer/${dataToSend.projectId}/${dataToSend.taskId}`,
               dataToSend,
                {headers: {"Content-Type": "application/json",}}
               )
@@ -35,8 +34,6 @@ export const ApplyTimer = ({ setStopTimer, setStartTimer, date}) => {
           })
           .catch(error=>{
             console.log(error)
-          }).finally(()=>{
-              // setShowDetail(true);
           })}
           catch (e) {
             console.log(e);

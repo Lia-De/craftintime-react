@@ -2,11 +2,12 @@ import he from 'he';
 import { projectAtom } from '../atoms/projectAtom';
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
-import CraftInTimeAPI, {statusLabels} from '../backendconfig';
+import {statusLabels} from '../backendconfig';
 import axios from 'axios';
 import { ApplyTimer } from './ApplyTimer';
 import { formatTimeSpan, formatDateTime } from '../components/FormatData';
 import { AddTagToProject, AddTagToTask } from './AddTagToItems';
+
 
 
 export const ProjectDetailView = () => {
@@ -21,7 +22,7 @@ const [stopDate, setStopDate] = useState(null);
 // Load in the project from the back-end, ensure it loads before rendering. Also check if it has a timer running.
     useEffect(()=>{
         setLoading(true);
-        axios.get(`${CraftInTimeAPI}/Project/getSingleProject/${project.projectId}`)    
+        axios.get(`/api/Project/getSingleProject/${project.projectId}`)    
         .then(response => {
             setProject(response.data);
             response.data.hasTimerRunning ? setTimer(true) : setTimer(false);
@@ -55,7 +56,7 @@ function toggleTimer(){
         setStopTimer(false);
         setStartTimer(true);
         setStopDate(null);
-        axios.post(`${CraftInTimeAPI}/Project/startTimer/${project.projectId}`,timerData, {
+        axios.post(`/api/Project/startTimer/${project.projectId}`,timerData, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -116,13 +117,11 @@ function toggleTimer(){
                 {task.description.split('\n').map((line,i) => <p key={i}>{he.decode(line).replace('<br>','')}</p>)}
                 
                 <div className="tagsList">
-                    <ul className="tagsList"></ul>
+                    <ul className="tagsList">
+                        {task.tags?.map((tag) => <li key={tag.tagId}>{tag.name}</li>) }
+                    </ul>
                     <div id="taskTagAdding">
-                        <form>
-                            <button type="submit">Add Tags</button>
-                            <input type="text" placeholder="Add tag" name="taskTagCloud" id="taskTagCloud9" />
-                            <input type="hidden" name="taskId" value="9" />
-                        </form>
+                        <AddTagToTask taskToEdit={task.taskId}/>
                     </div>
                 </div>
 

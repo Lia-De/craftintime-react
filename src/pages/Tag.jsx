@@ -4,57 +4,60 @@ import { useEffect, useState } from "react";
 import {tagListAtom} from '../atoms/tagListAtom';
 import { tagAtom } from "../atoms/tagAtom";
 import axios from "axios";
-import CraftInTimeAPI from '../backendconfig';
 import { projectAtom } from "../atoms/projectAtom";
 import { showDetailAtom } from "../atoms/showDetailAtom";
+import { AddNewTag } from "../components/AddNewTag";
+import { DeleteTag } from "../components/DeleteTag";
 
 export function Tag(){
 
-    const [showTag, setShowTag] = useState(false);
     const [tagList, setTagList]= useAtom(tagListAtom);
     const [tag, setTag] = useAtom(tagAtom);
     const [project, setProject] = useAtom(projectAtom);
     const [showDetail, setShowDetail] = useAtom(showDetailAtom);
+    const [addItemForm, setAddItemForm] = useState(false);
 
     useEffect(() => {
-        axios.get(`${CraftInTimeAPI}/Tag`)
+        axios.get(`/api/Tag`)
                     .then(response => {
                         setTagList(response.data);
-                        setShowTag(false);
+                        setShowDetail(false);
                     })
                     .catch(error => {
                         console.log(error);
                     });
+                    setShowDetail(false);
         }, []);
     
 function getTag(e){
     let tagId = e.currentTarget.id.split('-')[1];
-    axios.get(`${CraftInTimeAPI}/Tag/getSingleTag/${tagId}`)
+    axios.get(`/api/Tag/getSingleTag/${tagId}`)
     .then(response => {
         setTag(response.data)
-        setShowTag(true);
+        setShowDetail(true);
     }).catch(error => {
         console.log(error);
     });
 }
+function toggleAddingForm() {
+    setAddItemForm(prev => !prev);
+}
 
 function goToProject(proj){
     setProject(proj);
-    console.log(proj);
-    console.log(project);
     setShowDetail(true);
 }
 
-    if (showTag) {
+    if (showDetail) {
         return (
             <>
             <div className="header">
                 <button className="editButton"></button>
                 <h2 id="nowShowing">{tag.name}</h2>
-                <button id="closeButton" onClick={() => setShowTag(false) }>Back to list</button>
+                {/* <button id="closeButton" onClick={() => setShowTag(false) }>Back to list</button> */}
             </div>
-            <div id="contents">
-                <div id="detail-4">
+            <div id="contents">               
+                <div id={`detail-${tag.tagId}`}>
                     {tag.projects?.length == 0 ? 
                         <p>Not used in any projects</p>: 
                         <><p>Used in project</p> 
@@ -74,15 +77,17 @@ function goToProject(proj){
             <h2 id="nowShowing">{tagList?.length} Tags</h2>
         </div>
         <div id="contents" className="listAllTags">
+        <div id="addNewItem" className={addItemForm ? 'shadowbox':''}>
+            <button className={addItemForm? "addItemButtonActive":"addItemButton"} onClick={toggleAddingForm} aria-label="Add new tag">+</button>
+            {addItemForm && <AddNewTag /> }
+            </div>
             {tagList?.map((item) => (
                 <div key={item.tagId} className="itemCard" >
                     <div className="item" id={`detail-${item.tagId}`} onClick={getTag}>
                         <h3 className="tagName">{item.name}</h3>
-                        <p className="usage">{item.projectCount} ({item.taskCount})</p>
+                        <p className="usage">{item.projectCount ? item.projectCount: '0' } ({item.taskCount ? item.taskCount: '0'})</p>
                     </div>
-                    <div className="delete">
-                        <button className="deleteButton"></button>
-                    </div>
+                    <DeleteTag tagToDelete={item}/>
                 </div>
 
             ))

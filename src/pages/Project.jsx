@@ -2,7 +2,7 @@ import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { projectListAtom } from '../atoms/projectListAtom';
 import { projectAtom } from '../atoms/projectAtom';
-import CraftInTimeAPI, {statusLabels} from '../backendconfig';
+import {statusLabels} from '../backendconfig';
 import axios from 'axios';
 import { ProjectDetailView } from '../components/ProjectDetailView';
 import { showDetailAtom } from '../atoms/showDetailAtom';
@@ -22,7 +22,7 @@ const [addItemForm, setAddItemForm] = useState(false);
 // If we get sent here from tags (showProject is true) - then we want to display one project
 useEffect(() => {
     if (!showProject){
-        axios.get(`${CraftInTimeAPI}/Project`)
+        axios.get('/api/Project')
                 .then(response => {
                     setProjectList(response.data);
                     setProject(null);

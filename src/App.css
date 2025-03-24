@@ -5,7 +5,7 @@ padding: 0;
 
 :root {
   --mainGreen: #223602;
-  --mainSelected: hsl(83, 93%, 21%);
+  --mainSelected: #416704;
   --greyMain: #f5f5f5;
   --greyBorder: #e0e0e0;
   --greyShadow: #d0d0d0;
@@ -386,7 +386,14 @@ div.tagsList{
   flex-direction: row;
 }
 #projectTagAdding, #taskTagAdding{
+  display: flex;
+  flex-direction: row;
+  align-content: center;
   margin: auto 0;
+}
+#projectTagAdding>span, #taskTagAdding>span{
+  margin: auto 0;
+  font-size: 0.8rem;
 }
 #projectTagAdding>form, #taskTagAdding>form {
   grid-template-columns: 40px auto;
