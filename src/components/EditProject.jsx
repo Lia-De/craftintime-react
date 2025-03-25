@@ -3,9 +3,12 @@ import { projectAtom } from "../atoms/projectAtom"
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { PopulatedStatusList } from "./FormatData";
+import { taskListAtom } from "../atoms/taskListAtom";
 
 export const EditProject = ({setEditing}) => {
     const [project, setProject] = useAtom(projectAtom);
+    const [taskList, setTaskList] = useAtom(taskListAtom);
     const {register, handleSubmit, formState:{errors}, clearErrors } = useForm();
     const [editObject, setEditObject] = useState(null);
 
@@ -38,6 +41,7 @@ export const EditProject = ({setEditing}) => {
                 headers: {"Content-Type": "application/json",}
               })
             .then(()=> {
+                taskList && setTaskList(prev => prev.filter(t => t.taskId != task.taskId));
                  setProject(prev => ({
                     ...prev,
                     tasks : prev.tasks.filter(t => t.taskId != task.taskId)
@@ -70,18 +74,7 @@ return (
                 <textarea id="description" name="description" 
                 rows="5" defaultValue={project.description} {...register('description')}></textarea>
                 
-                <label htmlFor="statusZero">Planning</label>
-                <input type="radio" id="statusZero" name="status"
-                  defaultChecked={project.status === 0} value="0" {...register('status')} />
-                <label htmlFor="statusOne">Active</label>
-                <input type="radio" id="statusOne" name="status"
-                  defaultChecked={project.status === 1} value="1" {...register('status')} />
-                <label htmlFor="statusTwo">Inactive</label>
-                <input type="radio" id="statusTwo" name="status"
-                  defaultChecked={project.status === 2} value="2" {...register('status')} />
-                <label htmlFor="statusThree">Complete</label>
-                <input type="radio" id="statusThree" name="status"
-                  defaultChecked={project.status === 3} value="3" {...register('status')}  />
+              <PopulatedStatusList item={project} register={register} />
                 
                 <p className="span2">Click to remove Tasks or Tags</p>
                 <label>Tasks:</label>
@@ -109,9 +102,3 @@ return (
    )
     }
 
-    // let requestData = {
-    //     ProjectId: id,
-    //     Name: name,
-    //     Status: status,
-    //     Description: description
-    // };

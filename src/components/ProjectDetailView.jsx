@@ -1,5 +1,6 @@
 import he from 'he';
 import { projectAtom } from '../atoms/projectAtom';
+import {taskListAtom} from '../atoms/taskListAtom';
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import {statusLabels} from '../backendconfig';
@@ -8,12 +9,14 @@ import { ApplyTimer } from './ApplyTimer';
 import { formatTimeSpan, formatDateTime } from '../components/FormatData';
 import { AddTagToProject, AddTagToTask } from './AddTagToItems';
 import { EditProject } from './EditProject';
+import { EditTask } from './EditTask';
 import { AddNewTaskForm } from './AddNewItemForm';
 import clsx from "classnames";
 
 
 export const ProjectDetailView = () => {
 const [project, setProject] = useAtom(projectAtom);
+const [taskList, setTaskList] = useAtom(taskListAtom);
 const [loading, setLoading] = useState(true);
 const [timer, setTimer] = useState(false);
 const [startTimer, setStartTimer] = useState(false);
@@ -22,6 +25,7 @@ const [stopDate, setStopDate] = useState(null);
 const [editing, setEditing] = useState(false);
 const [editingTask, setEditingTask] = useState(false);
 const [addTaskForm, setAddTaskForm] = useState(false);
+const [taskToEdit, setTaskToEdit] = useState(0);
 
 
 // Load in the project from the back-end, ensure it loads before rendering. Also check if it has a timer running.
@@ -30,6 +34,7 @@ const [addTaskForm, setAddTaskForm] = useState(false);
         axios.get(`/api/Project/getSingleProject/${project.projectId}`)    
         .then(response => {
             setProject(response.data);
+            setTaskList(response.data.tasks);
             response.data.hasTimerRunning ? setTimer(true) : setTimer(false);
         })
         .catch(error => {
@@ -81,7 +86,7 @@ function toggleTimer(){
             <button className={clsx("editButton", { clicked: editing })} onClick={() => setEditing(!editing)}></button>
             <h2 id="nowShowing">{he.decode(project.name)}</h2>
             <div id="projectTimers">
-                {project.status === 3 ? '':<button id="timerStart" className={timer? 'running': ''} onClick={toggleTimer}>Start</button>}
+                {project.status === 3 ? '':<button id="timerStart" className={timer? 'running': undefined} onClick={toggleTimer}>Start</button>}
                 {stopTimer ? <ApplyTimer project={project} setStartTimer={setStartTimer} setStopTimer={setStopTimer} date={stopDate}/>:''}
             </div>
         </div>
@@ -90,7 +95,7 @@ function toggleTimer(){
             {editing && <EditProject setEditing={setEditing} />}
             
             <div className="header">
-                <p className={`status${project?.status}`}>{statusLabels[project?.status] || ""}</p>
+                <p className={`status${project?.status}`}>{statusLabels[project?.status] || "noDeadline"}</p>
                 <p className="totalTime">{formatTimeSpan(project.totalWorkingTime)}</p>
             </div>
             {project?.description.split('\n')
@@ -114,14 +119,20 @@ function toggleTimer(){
                 </p>
             </div>
             {addTaskForm && <AddNewTaskForm setAddTaskForm={setAddTaskForm}/>}
-            {project?.tasks?.map(task => !task.isDeleted && (<div key={`task-${task.taskId}`} className="detailTask shadowbox">
+
+            {taskList?.map(task => !task.isDeleted && (<div key={`task-${task.taskId}`} className="detailTask shadowbox">
                 <div className="header">
-                    <button className="editButton" onClick={()=>{setEditingTask(!editingTask)}}>Edit</button>
+                    <button className="editButton" onClick={()=>{
+                        setEditingTask(!editingTask);
+                        setTaskToEdit(task.taskId);
+                        }}>Edit</button>
                     <p className={`status${task?.status}`}>{statusLabels[task?.status] || ""}</p>
                     <h4 id={`task-${task.taskId}`}>{he.decode(task?.name)}</h4>
                     {task.deadline? <p className="deadline">{formatDateTime(task.deadline)}</p> : <p className="noDeadline" onClick={() => setDeadline(task.taskId)}></p>}
                 </div>
-                {editingTask && console.log('yay')}
+                
+                {editingTask && (taskToEdit===task.taskId) && <EditTask task={task} setEditingTask={setEditingTask}/>}
+
                 <p className="totalTime">{formatTimeSpan(task.timeSpent)}</p>
                 {task.description?.split('\n')?.map((line,i) => <p key={i}>{he.decode(line).replace('<br>','')}</p>)}
                 

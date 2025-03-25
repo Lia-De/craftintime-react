@@ -74,7 +74,7 @@ useEffect(() => {
              <h2 id="nowShowing">{titleFormat()}</h2>
         </div>
         <div id="contents">
-            <div id="addNewItem" className={addItemForm ? 'shadowbox':''}>
+            <div id="addNewItem" className={addItemForm ? 'shadowbox':undefined}>
                 <button className={addItemForm? "addItemButtonActive":"addItemButton"} onClick={toggleAddingForm} aria-label="Add new project">+</button>
                 {addItemForm ? <AddNewItemForm setAddItemForm={setAddItemForm} setProject={setProject} setShowProject={setShowProject} /> : ''}
             </div>

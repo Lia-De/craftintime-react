@@ -71,3 +71,22 @@
         // Add the TimeSpan seconds to your totalSeconds
         return totalSeconds + timeSpanInSeconds;
     }
+
+    export const PopulatedStatusList = ({item, register}) => {
+
+    return (<>       
+        <label htmlFor="statusZero">Planning</label>
+        <input type="radio" id="statusZero" name="status"
+          defaultChecked={item.status === 0} value="0" {...register('status')} />
+        <label htmlFor="statusOne">Active</label>
+        <input type="radio" id="statusOne" name="status"
+          defaultChecked={item.status === 1} value="1" {...register('status')} />
+        <label htmlFor="statusTwo">Inactive</label>
+        <input type="radio" id="statusTwo" name="status"
+          defaultChecked={item.status === 2} value="2" {...register('status')} />
+        <label htmlFor="statusThree">Complete</label>
+        <input type="radio" id="statusThree" name="status"
+          defaultChecked={item.status === 3} value="3" {...register('status')}  />
+          </>
+          )
+    }
