@@ -8,6 +8,7 @@ import { ApplyTimer } from './ApplyTimer';
 import { formatTimeSpan, formatDateTime } from '../components/FormatData';
 import { AddTagToProject, AddTagToTask } from './AddTagToItems';
 import { EditProject } from './EditProject';
+import { AddNewTaskForm } from './AddNewItemForm';
 
 
 
@@ -20,6 +21,7 @@ const [stopTimer, setStopTimer] = useState(false);
 const [stopDate, setStopDate] = useState(null);
 const [editing, setEditing] = useState(false);
 const [editingTask, setEditingTask] = useState(false);
+const [addTaskForm, setAddTaskForm] = useState(false);
 
 
 // Load in the project from the back-end, ensure it loads before rendering. Also check if it has a timer running.
@@ -69,9 +71,6 @@ function toggleTimer(){
         });
     }    
 }
-function toggleEditProject(){
-    setEditing(!editing);
-}
 
 
     if (loading) return <div className="header"><h2 id="nowShowing">Loading project ...</h2></div>;
@@ -79,7 +78,7 @@ function toggleEditProject(){
     return (
         <>
         <div className="header">
-            <button className="editButton" onClick={toggleEditProject}></button>
+            <button className="editButton" onClick={() => setEditing(!editing)}></button>
             <h2 id="nowShowing">{he.decode(project.name)}</h2>
             <div id="projectTimers">
                 {project.status === 3 ? '':<button id="timerStart" className={timer? 'running': ''} onClick={toggleTimer}>Start</button>}
@@ -109,10 +108,12 @@ function toggleEditProject(){
             <div className="header">
                 <h3>Tasks</h3>
                 <p id="addingBox">
-                    <button id="addTaskButton" aria-label="Add new task">+</button>
+                    <button id="addTaskButton" aria-label="Add new task"
+                    onClick={()=>setAddTaskForm(!addTaskForm)}>+</button>
+                    
                 </p>
             </div>
-
+            {addTaskForm && <AddNewTaskForm setAddTaskForm={setAddTaskForm}/>}
             {project?.tasks?.map(task => !task.isDeleted && (<div key={`task-${task.taskId}`} className="detailTask shadowbox">
                 <div className="header">
                     <button className="editButton">Edit</button>

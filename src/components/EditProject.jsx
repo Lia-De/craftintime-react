@@ -28,13 +28,10 @@ export const EditProject = ({setEditing}) => {
         }).catch((e)=> {console.log(e,editObject)})
     },[editObject])
 
-    // errors.name && console.log(`We have errors${errors}`, errors) && clearErrors();
-
 
     const confirmDelete = (task) => {
         confirm(`Are you sure you want to delete ${task.name}?`, 'Yes','Cancel') && 
-        axios(
-            {
+        axios({
                 method: 'delete',
                 url:  `/api/Task/deleteTask`,
                 data: task,
@@ -49,6 +46,15 @@ export const EditProject = ({setEditing}) => {
                 }).catch((error)=>{console.log(error)})
     }
 
+    const confirmRemoveTag = (tag) => {
+        axios.post(`/api/Project/removeTag/${project.projectId}/${tag.tagId}`)
+        .catch(e => {console.log(e)}).finally(()=>{
+            setProject(prev => ({
+                ...prev,
+                tags: prev.tags.filter(t => t.tagId!= tag.tagId)
+            }))
+        })
+    }
 
 
 return (
@@ -57,7 +63,8 @@ return (
         <div>
             <form id="editProjectForm" onSubmit={handleSubmit(onSubmit)}>
                 <label htmlFor="name">Name: </label>
-                <input type="text" id="name" name='name' defaultValue={project.name} {...register('name', {minLength:3})}/>
+                <input type="text" id="name" name='name' 
+                defaultValue={project.name} {...register('name', {minLength:3})}/>
                 
                 <label htmlFor="description">About:</label>
                 <textarea id="description" name="description" 
@@ -87,10 +94,12 @@ return (
                 
                 <label>Tags:</label>
                 <div id="editProjectTags">
-                    <p id="tag-1" className="deleteTag">colourmart</p>
-                    <p id="tag-3" className="deleteTag">twill</p>
-                    <p id="tag-7" className="deleteTag">temple</p>
-                    <p id="tag-15" className="deleteTag">linen</p>
+                    {project.tags.map(tag => {
+                        return <p key={tag.tagId} 
+                        onClick={()=>{confirmRemoveTag(tag)}}
+                        className="deleteTag">{tag.name}</p>
+                    })}
+
                 </div>
                 <input type="hidden" name="projectId" value={project.projectId} {...register('projectId')}  />
                 <button type="submit">Save</button>
