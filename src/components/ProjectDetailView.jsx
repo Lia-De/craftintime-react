@@ -121,7 +121,7 @@ function toggleEditProject(){
                     {task.deadline? <p className="deadline">{formatDateTime(task.deadline)}</p> : <p className="noDeadline" onClick={() => setDeadline(task.taskId)}></p>}
                 </div>
                 <p className="totalTime">{formatTimeSpan(task.timeSpent)}</p>
-                {task.description.split('\n')?.map((line,i) => <p key={i}>{he.decode(line).replace('<br>','')}</p>)}
+                {task.description?.split('\n')?.map((line,i) => <p key={i}>{he.decode(line).replace('<br>','')}</p>)}
                 
                 <div className="tagsList">
                     <ul className="tagsList">
