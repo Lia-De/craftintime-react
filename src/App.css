@@ -65,12 +65,14 @@ h2 {
 #addingBox>button {  
   padding:0 0.5em;
 }
-
+button.clicked {
+  background-color: var(--mainSelected);
+}
 #addingBox>button.clicked {
-  background-color: var(--greySelected);
+  background-color: var(--mainSelected);
 }
 .addItemButtonActive {
-background-color: var(--greySelected);
+background-color: var(--mainSelected);
 }
 .header {
   display: flex;

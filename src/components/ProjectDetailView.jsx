@@ -9,7 +9,7 @@ import { formatTimeSpan, formatDateTime } from '../components/FormatData';
 import { AddTagToProject, AddTagToTask } from './AddTagToItems';
 import { EditProject } from './EditProject';
 import { AddNewTaskForm } from './AddNewItemForm';
-
+import clsx from "classnames";
 
 
 export const ProjectDetailView = () => {
@@ -78,7 +78,7 @@ function toggleTimer(){
     return (
         <>
         <div className="header">
-            <button className="editButton" onClick={() => setEditing(!editing)}></button>
+            <button className={clsx("editButton", { clicked: editing })} onClick={() => setEditing(!editing)}></button>
             <h2 id="nowShowing">{he.decode(project.name)}</h2>
             <div id="projectTimers">
                 {project.status === 3 ? '':<button id="timerStart" className={timer? 'running': ''} onClick={toggleTimer}>Start</button>}
@@ -108,7 +108,7 @@ function toggleTimer(){
             <div className="header">
                 <h3>Tasks</h3>
                 <p id="addingBox">
-                    <button id="addTaskButton" aria-label="Add new task"
+                    <button id="addTaskButton" className={addTaskForm && "clicked"} aria-label="Add new task"
                     onClick={()=>setAddTaskForm(!addTaskForm)}>+</button>
                     
                 </p>
@@ -116,11 +116,12 @@ function toggleTimer(){
             {addTaskForm && <AddNewTaskForm setAddTaskForm={setAddTaskForm}/>}
             {project?.tasks?.map(task => !task.isDeleted && (<div key={`task-${task.taskId}`} className="detailTask shadowbox">
                 <div className="header">
-                    <button className="editButton">Edit</button>
+                    <button className="editButton" onClick={()=>{setEditingTask(!editingTask)}}>Edit</button>
                     <p className={`status${task?.status}`}>{statusLabels[task?.status] || ""}</p>
                     <h4 id={`task-${task.taskId}`}>{he.decode(task?.name)}</h4>
                     {task.deadline? <p className="deadline">{formatDateTime(task.deadline)}</p> : <p className="noDeadline" onClick={() => setDeadline(task.taskId)}></p>}
                 </div>
+                {editingTask && console.log('yay')}
                 <p className="totalTime">{formatTimeSpan(task.timeSpent)}</p>
                 {task.description?.split('\n')?.map((line,i) => <p key={i}>{he.decode(line).replace('<br>','')}</p>)}
                 
