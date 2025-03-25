@@ -3,7 +3,6 @@ import { projectAtom } from "../atoms/projectAtom"
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { DeleteTask } from "./DeleteTask";
 
 export const EditProject = ({setEditing}) => {
     const [project, setProject] = useAtom(projectAtom);
@@ -81,8 +80,9 @@ return (
                 <label>Tasks:</label>
                 <div id="editProjectTasks">
                     {project.tasks.map((task) => {
-                        return (
-                        <p key={`task${task.taskId}`} className="deleteTask" onClick={() => confirmDelete(task)}>{task.name}</p>) }) }
+                        return (!task.isDeleted && <p key={`task${task.taskId}`} 
+                                className="deleteTask" onClick={() => 
+                                confirmDelete(task)}>{task.name}</p>) }) }
                 </div>
                 
                 <label>Tags:</label>
