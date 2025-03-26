@@ -10,16 +10,19 @@ export const EditTask = ({ task, setEditingTask}) => {
     const onSubmit = (data) => {
         let newDeadline = (data.deadline ==='') ? null : data.deadline;
         let newDesc = data.description === '' ? null : data.description;
+        let newStatus = data.status? Number(data.status) : null;
         const obj = {...data,
                     deadline: newDeadline,
-                    description: newDesc
-                    }
-        setEditObject(obj)
-
-        
+                    description: newDesc,
+                    taskId: Number(task.taskId),
+                    projectId: Number(task.projectId),
+                    status: newStatus
+                    };
+                    console.log(obj);
+        setEditObject(obj);
     }
     useEffect(()=>{
-        editObject && axios.post()
+        (editObject!=null) && axios.post('/api/Task/updateTask', editObject)
         .then(response => {
             console.log(response.data)
             setEditingTask(false);
@@ -53,8 +56,7 @@ export const EditTask = ({ task, setEditingTask}) => {
                     })}
                     </div>
                     <label htmlFor="deadline">Deadline: </label>
-                    <input name="deadline" id="deadline" type="datetime-local" {...register('deadline')} />
-                    <input type="hidden" id="taskId" name="taskId" value={task.taskId} {...register('taskId')} />
+                    <input name="deadline" id="deadline" defaultValue={task.deadline} type="datetime-local" {...register('deadline')} />
                     <button type="submit">Save</button>
                 </form>
             </div>

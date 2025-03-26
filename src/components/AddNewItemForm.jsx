@@ -4,11 +4,12 @@ import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { useAtom } from "jotai";
 import { projectAtom } from "../atoms/projectAtom";
+import { taskListAtom } from "../atoms/taskListAtom";
 
 export const AddNewItemForm = ({setAddItemForm, setProject, setShowProject}) => {
     const { register, handleSubmit, reset, formState:{errors} } = useForm();
     const [newProject, setNewProject] = useState(null);
-
+    
     const onSubmit = (data) => {
         setNewProject(data);
         reset();
@@ -54,6 +55,7 @@ export const AddNewTaskForm = ({setAddTaskForm}) =>{
     const { register, handleSubmit, reset, formState:{errors} } = useForm();
     const [newTask, setNewTask] = useState(null);
     const [project, setProject] = useAtom(projectAtom);
+    const [taskList, setTaskList] = useAtom(taskListAtom);
 
     const onSubmit = (data) => {
         let newDesc = data.description==='' ? null : data.description;
@@ -70,11 +72,7 @@ export const AddNewTaskForm = ({setAddTaskForm}) =>{
             },
         })
         .then((result) => {
-            console.log(result.data);
-            setProject(prev => ({
-                ...prev,
-                tasks: [...prev.tasks, result.data] // Append the new task to the array
-            }));
+            setTaskList(prev => ([...prev, result.data] ));// Append the new task to the array
         })
         .catch((e)=>console.log(e))
         .finally(()=>{

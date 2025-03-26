@@ -90,9 +90,6 @@ function goToProject(proj){
                 </div>
             ))
             }
-
-        
-
         </div>
     </>
     )
