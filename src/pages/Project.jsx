@@ -1,14 +1,14 @@
-import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
+import { useAtom } from 'jotai';
 import { projectListAtom } from '../atoms/projectListAtom';
+import { showDetailAtom } from '../atoms/showDetailAtom';
 import { projectAtom } from '../atoms/projectAtom';
 import {statusLabels} from '../backendconfig';
 import axios from 'axios';
 import { ProjectDetailView } from '../components/ProjectDetailView';
-import { showDetailAtom } from '../atoms/showDetailAtom';
 import { AddNewItemForm } from '../components/AddNewItemForm';
 import { formatTimeSpan } from '../components/FormatData';
-import { DeleteProject } from '../components/DeleteDBITem';
+import { DeleteProject } from '../components/DeleteDBItem';
 
 
 
@@ -35,7 +35,6 @@ useEffect(() => {
                     if (error.status ===500 ){
                         setServerError(true);
                     }
-                    
                 });
             }
     }, [showProject]);
@@ -75,21 +74,24 @@ useEffect(() => {
         </div>
         <div id="contents">
             <div id="addNewItem" className={addItemForm ? 'shadowbox':undefined}>
-                <button className={addItemForm? "addItemButtonActive":"addItemButton"} onClick={toggleAddingForm} aria-label="Add new project">+</button>
-                {addItemForm ? <AddNewItemForm setAddItemForm={setAddItemForm} setProject={setProject} setShowProject={setShowProject} /> : ''}
+                <button className={addItemForm? "addItemButtonActive":"addItemButton"} 
+                onClick={toggleAddingForm} aria-label="Add new project">+</button>
+                {addItemForm && <AddNewItemForm setAddItemForm={setAddItemForm} 
+                    setProject={setProject} setShowProject={setShowProject} />}
             </div>
             {projectList?.map(item => (
                 <div key={item.projectId} className="itemCard">
-                    <div tabIndex="0" className="item" id={`detail-${item.projectId}`} onClick={displayProjectDetails}>
+                    <div tabIndex="0" className="item" id={`detail-${item.projectId}`} 
+                        onClick={displayProjectDetails}>
                         <p className={`status${item.status}`}>{statusLabels[project?.status] || ""}</p>
-                        <h3>{item.name}</h3><p className={item.hasTimerRunning? "totalTime runningTimer":"totalTime"}>{formatTimeSpan(item.totalWorkingTime)}</p>
+                        <h3>{item.name}</h3>
+                        <p className={item.hasTimerRunning? "totalTime runningTimer":"totalTime"}>
+                            {formatTimeSpan(item.totalWorkingTime)}</p>
                     </div>
-                    {/* <div  className="delete"><button className="deleteButton" aria-label={`Delete project ${item.name}`}></button></div> */}
                     <DeleteProject projectToDelete={item} />
              </div>
              ))}
         </div>
-    
         </>
     )}
 }

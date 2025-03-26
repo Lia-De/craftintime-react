@@ -1,4 +1,4 @@
-
+import he from 'he';
     // ********************************************************************************/
     //              Helper functions - formats TimeSpan to human readable form
     //                 Extract dd:hh:mm:ss from "dd.hh:mm:ss.ffffff"
@@ -89,4 +89,9 @@
           defaultChecked={item.status === 3} value="3" {...register('status')}  />
           </>
           )
+    }
+
+    export function renderTextWithLineBreaks(text){
+        return text?.split('\n')?.map((line,i) => <p key={i}>{he.decode(line).replace('<br>','')}</p>)
+
     }

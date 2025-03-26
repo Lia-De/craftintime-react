@@ -145,6 +145,7 @@ button:hover {
   overflow: hidden;
   box-shadow: unset;
   height: 2em;
+  width: 2em;
 }
 .editButton {
   background-image: url('./img/edit.png');
@@ -240,7 +241,8 @@ div.selected, div.active {
 
 p.status0 {  /* Planning */
   background-image: url('./img/pending_20dp.png');
-}p.status1 {  /* Active */
+}
+p.status1 {  /* Active */
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -431,6 +433,12 @@ form > p.span2{
 }
 form > p {
   font-style:italic;
+}
+form >p.errorMessage {
+  color: red;
+  grid-column: 2 / 3;
+  font-size: 0.8em;
+  margin-top:0;
 }
 p.deleteTask, p.deleteTag {
   background-image: url('./img/tag-remove.png');

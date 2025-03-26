@@ -6,7 +6,7 @@ import axios from "axios";
 import { PopulatedStatusList } from "./FormatData";
 import { taskListAtom } from "../atoms/taskListAtom";
 
-export const EditProject = ({setEditing}) => {
+export const EditProject = ({setUiState}) => {
     const [project, setProject] = useAtom(projectAtom);
     const [taskList, setTaskList] = useAtom(taskListAtom);
     const {register, handleSubmit, formState:{errors}, clearErrors } = useForm();
@@ -27,7 +27,7 @@ export const EditProject = ({setEditing}) => {
         axios.post('/api/Project/updateProject',editObject, {headers: {"Content-Type": "application/json",}})
         .then(response=>{
             response.data && setProject(response.data);
-            setEditing(false);
+            setUiState(prev => ({...prev, editing: false}))
         }).catch((e)=> {console.log(e,editObject)})
     },[editObject])
 
@@ -68,33 +68,36 @@ return (
             <form id="editProjectForm" onSubmit={handleSubmit(onSubmit)}>
                 <label htmlFor="name">Name: </label>
                 <input type="text" id="name" name='name' 
-                defaultValue={project.name} {...register('name', {minLength:3})}/>
-                
+                    defaultValue={project.name} {...register('name', {required:true, minLength:3})}/>
+                    {errors.name && <p className="errorMessage">Name must be at least 3 characters</p>}
                 <label htmlFor="description">About:</label>
-                <textarea id="description" name="description" 
-                rows="5" defaultValue={project.description} {...register('description')}></textarea>
+                <textarea id="description" name="description" rows="5" 
+                    defaultValue={project.description} {...register('description')}></textarea>
                 
               <PopulatedStatusList item={project} register={register} />
                 
-                <p className="span2">Click to remove Tasks or Tags</p>
-                <label>Tasks:</label>
+                {(project.tasks.length> 0 || project.tags.length>0 )&& 
+                    <p className="span2">Click to remove Tasks or Tags</p>}
+                {project.tasks.length > 0 && (<><label>Tasks:</label>
                 <div id="editProjectTasks">
                     {project.tasks.map((task) => {
                         return (!task.isDeleted && <p key={`task${task.taskId}`} 
                                 className="deleteTask" onClick={() => 
                                 confirmDelete(task)}>{task.name}</p>) }) }
-                </div>
+                </div></>)}
                 
-                <label>Tags:</label>
+                {project.tags.length>0 && (<><label>Tags:</label>
                 <div id="editProjectTags">
                     {project.tags.map(tag => {
                         return <p key={tag.tagId} 
                         onClick={()=>{confirmRemoveTag(tag)}}
                         className="deleteTag">{tag.name}</p>
                     })}
-
                 </div>
-                <input type="hidden" name="projectId" value={project.projectId} {...register('projectId')}  />
+                </>)}
+
+                <input type="hidden" name="projectId" 
+                    value={project.projectId} {...register('projectId')}  />
                 <button type="submit">Save</button>
             </form>
         </div>

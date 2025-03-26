@@ -51,7 +51,7 @@ return (<>
     )
 }
 
-export const AddNewTaskForm = ({setAddTaskForm}) =>{
+export const AddNewTaskForm = ({setUiState}) =>{
     const { register, handleSubmit, reset, formState:{errors} } = useForm();
     const [newTask, setNewTask] = useState(null);
     const [project, setProject] = useAtom(projectAtom);
@@ -60,12 +60,11 @@ export const AddNewTaskForm = ({setAddTaskForm}) =>{
     const onSubmit = (data) => {
         let newDesc = data.description==='' ? null : data.description;
         let newDeadline=data.deadline==='' ? null : data.deadline;
-        setNewTask(({...data, description: newDesc, deadline: newDeadline}));
+        setNewTask(({...data, description: newDesc, deadline: newDeadline, projectId: project.projectId}));
         
         reset();
     }
     useEffect(() => {
-        console.log(newTask);
         (newTask!=null) && axios.post('/api/Task/addTask',newTask, {
             headers: {
                 "Content-Type": "application/json",
@@ -76,7 +75,7 @@ export const AddNewTaskForm = ({setAddTaskForm}) =>{
         })
         .catch((e)=>console.log(e))
         .finally(()=>{
-            setAddTaskForm(prev => !prev);
+            setUiState(prev => ({...prev, addTaskForm: false}));
         });
     },[newTask])
     
@@ -87,11 +86,14 @@ export const AddNewTaskForm = ({setAddTaskForm}) =>{
             <input 
                 placeholder={errors.name&&'Tasks must have a name'} 
                 type="text" id="name" name="name" {...register('name', {required:true})} />
+
             <label htmlFor="description">Description</label>
-            <input id="description" name="description" type="text" {...register('description')} />
-            <input type="hidden" name="projectId" value={project.projectId} {...register('projectId')} />
+            <input id="description" name="description" type="text" 
+                {...register('description')} />
+            
             <label htmlFor="deadline">Optional Deadline: </label>
-            <input type="datetime-local" id="deadline" name="deadline" defaultValue={null} {...register('deadline')} />
+            <input type="datetime-local" id="deadline" name="deadline" defaultValue={null} 
+                {...register('deadline')} />
             <button type="submit">Add</button>
         </form>
     </div>
