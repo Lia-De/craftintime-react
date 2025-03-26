@@ -11,7 +11,7 @@ import { AddTagToProject, AddTagToTask } from './AddTagToItems';
 import { EditProject } from './EditProject';
 import { EditTask } from './EditTask';
 import { AddNewTaskForm } from './AddNewItemForm';
-import clsx from "classnames";
+import clsx from 'classnames';
 
 
 export const ProjectDetailView = () => {
@@ -95,7 +95,7 @@ function toggleTimer(){
             {editing && <EditProject setEditing={setEditing} />}
             
             <div className="header">
-                <p className={`status${project?.status}`}>{statusLabels[project?.status] || "noDeadline"}</p>
+                <p className={project?.status ? `status${project?.status}`:undefined}>{statusLabels[project?.status] || ""}</p>
                 <p className="totalTime">{formatTimeSpan(project.totalWorkingTime)}</p>
             </div>
             {project?.description.split('\n')
@@ -113,7 +113,7 @@ function toggleTimer(){
             <div className="header">
                 <h3>Tasks</h3>
                 <p id="addingBox">
-                    <button id="addTaskButton" className={addTaskForm && "clicked"} aria-label="Add new task"
+                    <button id="addTaskButton" className={addTaskForm ? "clicked": undefined} aria-label="Add new task"
                     onClick={()=>setAddTaskForm(!addTaskForm)}>+</button>
                     
                 </p>
@@ -126,7 +126,7 @@ function toggleTimer(){
                         setEditingTask(!editingTask);
                         setTaskToEdit(task.taskId);
                         }}>Edit</button>
-                    <p className={`status${task?.status}`}>{statusLabels[task?.status] || ""}</p>
+                    <p className={task?.status ? `status${task?.status}`:undefined}>{statusLabels[task?.status] || ""}</p>
                     <h4 id={`task-${task.taskId}`}>{he.decode(task?.name)}</h4>
                     {task.deadline? <p className="deadline">{formatDateTime(task.deadline)}</p> : <p className="noDeadline" onClick={() => setDeadline(task.taskId)}></p>}
                 </div>
