@@ -88,7 +88,6 @@ function goToProject(proj){
                     </div>
                     <DeleteTag tagToDelete={item}/>
                 </div>
-
             ))
             }
 
