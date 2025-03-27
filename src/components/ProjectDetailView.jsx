@@ -30,7 +30,7 @@ const [uiState, setUiState] = useState({
     stopTimer: false,
     editing: false,
     addTaskForm: false,
-    taskToEdit: 0
+    taskToEdit: 0,
 });
 
 
