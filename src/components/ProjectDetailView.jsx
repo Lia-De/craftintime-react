@@ -12,6 +12,7 @@ import { EditProject } from './EditProject';
 import { EditTask, EditTaskDeadline } from './EditTask';
 import { AddNewTaskForm } from './AddNewItemForm';
 import clsx from 'classnames';
+import { TimeReport } from './TimeReport';
 
 
 export const ProjectDetailView = () => {
@@ -31,6 +32,7 @@ const [uiState, setUiState] = useState({
     editing: false,
     addTaskForm: false,
     taskToEdit: 0,
+    timeReport: false
 });
 
 
@@ -79,7 +81,7 @@ function toggleTimer(){
             },
         }).catch((error)=>{console.log(error)})
         .finally(()=>{
-            setStartTimer(false);
+            // setStartTimer(false);
         });
     }    
 }
@@ -108,8 +110,12 @@ function toggleTimer(){
             <div className="header">
                 <p className={project?.status ? `status${project?.status}`:undefined}>
                     {statusLabels[project?.status] || ""}</p>
-                <p className="totalTime">{formatTimeSpan(project.totalWorkingTime)}</p>
+                <p className="totalTime" 
+                    onClick={()=>{setUiState((prev)=> 
+                        ({...prev, timeReport: !prev.timeReport})
+                )}}>{formatTimeSpan(project.totalWorkingTime)}</p>
             </div>
+            {uiState.timeReport && <TimeReport />}
             {project && renderTextWithLineBreaks(project.description)}
 
             <div id="tagBox" className="tagsList">

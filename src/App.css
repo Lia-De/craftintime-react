@@ -120,6 +120,9 @@ form > input[type="radio"] {
 #setDeadlineForm {
   grid-template-columns: auto;
 }
+.toggleTimeReport {
+  background-color: var(--greySelected);
+}
 
 button {
   padding: 0.5em 1em;
@@ -476,7 +479,12 @@ div#timeReport {
 div#timeReport > h4{
   margin-top: 0.5em;
 }
-
+#dateDetails>p:nth-child(2n) {
+  background-color: var(--greyBorder);
+}
+#dateDetails > p {
+  margin-block-end: 0;
+}
 /* Start styling for Tags page */
 #contents.listAllTags {
   display: flex;
