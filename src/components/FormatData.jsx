@@ -38,126 +38,122 @@ import he from 'he';
     return formattedParts.length > 0 ? formattedParts.join(" ") : 'No time recorded';
 }
 
-   
-    // ********************************************************************************/
-    //              Helper functions - formats DateTime Deadline to human readable form
-    // ********************************************************************************/
-    export function formatDateTime(dateString) {
-        let date = new Date(dateString);
-        let now = new Date();
-        let year = date.getFullYear();
-        let month = date.toLocaleString('en-US', { month: 'short' }); 
-        let day = date.getDate();
-        let hours = date.getHours().toString().padStart(2, '0'); // Ensure two-digits
-        let minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two-digits
-        // If the year is the current year, omit it
-        let showYear = year !== now.getFullYear();
-        // Format string based on condition
+
+// ********************************************************************************/
+//              Helper functions - formats DateTime Deadline to human readable form
+// ********************************************************************************/
+export function formatDateTime(dateString) {
+    let date = new Date(dateString);
+    let now = new Date();
+    let year = date.getFullYear();
+    let month = date.toLocaleString('en-US', { month: 'short' }); 
+    let day = date.getDate();
+    let hours = date.getHours().toString().padStart(2, '0'); // Ensure two-digits
+    let minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two-digits
+    // If the year is the current year, omit it
+    let showYear = year !== now.getFullYear();
+    // Format string based on condition
+    return showYear
+        ? `${hours}:${minutes}, ${month} ${day}, ${year}`
+        : `${hours}:${minutes}, ${month} ${day}`;
+}
+
+export function formatReportDateTime(start, end) {
+    let startDate = new Date(start);
+    let endDate = new Date(end);
+    let now = new Date();
+    let year = startDate.getFullYear();
+    let month = startDate.toLocaleString('en-US', { month: 'short' }); 
+    let month2 = endDate.toLocaleString('en-US', { month: 'short' }); 
+    let day = startDate.getDate();
+    let day2 = endDate.getDate();
+    let showTwoDates = (day != day2);
+    let hours = startDate.getHours().toString().padStart(2, '0'); // Ensure two-digits
+    let minutes = startDate.getMinutes().toString().padStart(2, '0'); // Ensure two-digits
+    let endHour = endDate.getHours().toString().padStart(2, '0'); // Ensure two-digits
+    let endMinutes = endDate.getMinutes().toString().padStart(2, '0'); // Ensure two-digits
+    // If the year is the current year, omit it
+    let showYear = year !== now.getFullYear();
+    // Format string based on condition
+    if (showTwoDates){
         return showYear
-            ? `${hours}:${minutes}, ${month} ${day}, ${year}`
-            : `${hours}:${minutes}, ${month} ${day}`;
-    }
+        ? `${hours}:${minutes}, ${month} ${day}, ${year} - ${endHour}:${endMinutes}, ${month2} ${day2}, ${year}`
+        : `${hours}:${minutes}, ${month} ${day} - ${endHour}:${endMinutes}, ${month2} ${day2}`;
+        
+        } else {
+        return showYear
+            ? `${hours}:${minutes} - ${endHour}:${endMinutes}, ${month} ${day}, ${year}`
+            : `${hours}:${minutes} - ${endHour}:${endMinutes}, ${month} ${day}`;    
+        }            
+}
 
-    export function formatReportDateTime(start, end) {
-        let startDate = new Date(start);
-        let endDate = new Date(end);
-        let now = new Date();
-        let year = startDate.getFullYear();
-        let month = startDate.toLocaleString('en-US', { month: 'short' }); 
-        let month2 = endDate.toLocaleString('en-US', { month: 'short' }); 
-        let day = startDate.getDate();
-        let day2='';
-        if (startDate.getDate != endDate.getDate){
-            day2 = endDate.getDate();
+export function addTimeSpanToSeconds(timeSpanStr, totalSeconds) {
+    // Split the TimeSpan by ":"
+    const [hours, minutes, secondsWithMs] = timeSpanStr.split(":");
+
+    // Split seconds from milliseconds
+    const [seconds, milliseconds] = secondsWithMs.split(".");
+
+    // Convert to total seconds (including milliseconds)
+    const timeSpanInSeconds = (parseInt(hours) * 3600) + (parseInt(minutes) * 60) + parseInt(seconds);
+
+    // Add the TimeSpan seconds to your totalSeconds
+    return totalSeconds + timeSpanInSeconds;
+}
+
+export const PopulatedStatusList = ({item, register}) => {
+
+return (<>       
+    <label htmlFor="statusZero">Planning</label>
+    <input type="radio" id="statusZero" name="status"
+        defaultChecked={item.status === 0} value="0" {...register('status')} />
+    <label htmlFor="statusOne">Active</label>
+    <input type="radio" id="statusOne" name="status"
+        defaultChecked={item.status === 1} value="1" {...register('status')} />
+    <label htmlFor="statusTwo">Inactive</label>
+    <input type="radio" id="statusTwo" name="status"
+        defaultChecked={item.status === 2} value="2" {...register('status')} />
+    <label htmlFor="statusThree">Complete</label>
+    <input type="radio" id="statusThree" name="status"
+        defaultChecked={item.status === 3} value="3" {...register('status')}  />
+        </>
+        )
+}
+
+export function renderTextWithLineBreaks(text){
+    return text?.split('\n')?.map((line,i) => <p key={i}>{he.decode(line).replace('<br>','')}</p>)
+
+}
+
+
+export function calculateTotalTimePerDay(timers) {
+    const timePerDay = {};
+    const tasksPerDay = {};
+
+    timers.forEach((timer) => {
+        const startDate = new Date(timer.startDate);
+        const stopDate = new Date(timer.endDate);
+
+        const dayKey = startDate.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+        const durationMs = stopDate - startDate;
+        const durationMinutes = Math.floor(durationMs / (1000 * 60));
+        const taskId = timer.taskId ?? 0; 
+
+        // Accumulate total time per day
+        if (!timePerDay[dayKey]) {
+            timePerDay[dayKey] = 0;
+            tasksPerDay[dayKey] = new Set(); // Use a Set to avoid duplicate task entries
         }
-        let hours = startDate.getHours().toString().padStart(2, '0'); // Ensure two-digits
-        let minutes = startDate.getMinutes().toString().padStart(2, '0'); // Ensure two-digits
-        let endHour = endDate.getHours().toString().padStart(2, '0'); // Ensure two-digits
-        let endMinutes = endDate.getMinutes().toString().padStart(2, '0'); // Ensure two-digits
-        // If the year is the current year, omit it
-        let showYear = year !== now.getFullYear();
-        // Format string based on condition
-        if (day2===''){
-            return showYear
-                ? `${hours}:${minutes} - ${endHour}:${endMinutes}, ${month} ${day}, ${year}`
-                : `${hours}:${minutes} - ${endHour}:${endMinutes}, ${month} ${day}`;
-            } else {
-            return showYear
-                ? `${hours}:${minutes}, ${month} ${day} - ${endHour}:${endMinutes}, ${month2} ${day2}, ${year}`
-                : `${hours}:${minutes}, ${month} ${day} - ${endHour}:${endMinutes}, ${month2} ${day2}`;
-            }
-            
-    }
 
+        timePerDay[dayKey] += durationMinutes;
+        tasksPerDay[dayKey].add(taskId);
+    });
 
-    export function addTimeSpanToSeconds(timeSpanStr, totalSeconds) {
-        // Split the TimeSpan by ":"
-        const [hours, minutes, secondsWithMs] = timeSpanStr.split(":");
-    
-        // Split seconds from milliseconds
-        const [seconds, milliseconds] = secondsWithMs.split(".");
-    
-        // Convert to total seconds (including milliseconds)
-        const timeSpanInSeconds = (parseInt(hours) * 3600) + (parseInt(minutes) * 60) + parseInt(seconds);
-    
-        // Add the TimeSpan seconds to your totalSeconds
-        return totalSeconds + timeSpanInSeconds;
-    }
+    // Convert to final formatted output
+    return Object.entries(timePerDay).map(([date, minutes]) => ({
+        date,
+        totalTime: `${Math.floor(minutes / 60)}h ${minutes % 60}m`,
+        tasks: Array.from(tasksPerDay[date]) // Convert Set to Array for output
+    }));
+}
 
-    export const PopulatedStatusList = ({item, register}) => {
-
-    return (<>       
-        <label htmlFor="statusZero">Planning</label>
-        <input type="radio" id="statusZero" name="status"
-          defaultChecked={item.status === 0} value="0" {...register('status')} />
-        <label htmlFor="statusOne">Active</label>
-        <input type="radio" id="statusOne" name="status"
-          defaultChecked={item.status === 1} value="1" {...register('status')} />
-        <label htmlFor="statusTwo">Inactive</label>
-        <input type="radio" id="statusTwo" name="status"
-          defaultChecked={item.status === 2} value="2" {...register('status')} />
-        <label htmlFor="statusThree">Complete</label>
-        <input type="radio" id="statusThree" name="status"
-          defaultChecked={item.status === 3} value="3" {...register('status')}  />
-          </>
-          )
-    }
-
-    export function renderTextWithLineBreaks(text){
-        return text?.split('\n')?.map((line,i) => <p key={i}>{he.decode(line).replace('<br>','')}</p>)
-
-    }
-
-
-    export function calculateTotalTimePerDay(timers) {
-        const timePerDay = {};
-        const tasksPerDay = {};
-    
-        timers.forEach((timer) => {
-            const startDate = new Date(timer.startDate);
-            const stopDate = new Date(timer.endDate);
-    
-            const dayKey = startDate.toISOString().split("T")[0]; // Format as YYYY-MM-DD
-            const durationMs = stopDate - startDate;
-            const durationMinutes = Math.floor(durationMs / (1000 * 60));
-            const taskId = timer.taskId ?? 0; 
-    
-            // Accumulate total time per day
-            if (!timePerDay[dayKey]) {
-                timePerDay[dayKey] = 0;
-                tasksPerDay[dayKey] = new Set(); // Use a Set to avoid duplicate task entries
-            }
-    
-            timePerDay[dayKey] += durationMinutes;
-            tasksPerDay[dayKey].add(taskId);
-        });
-    
-        // Convert to final formatted output
-        return Object.entries(timePerDay).map(([date, minutes]) => ({
-            date,
-            totalTime: `${Math.floor(minutes / 60)}h ${minutes % 60}m`,
-            tasks: Array.from(tasksPerDay[date]) // Convert Set to Array for output
-        }));
-    }
-    
-    
