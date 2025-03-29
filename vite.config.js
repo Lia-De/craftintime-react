@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5024',
+        target: 'https://craftintimeapi-cre5hhfuhudvajac.swedencentral-01.azurewebsites.net/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
