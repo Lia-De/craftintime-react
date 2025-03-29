@@ -3,7 +3,7 @@ import { useAtomValue } from "jotai"
 import { projectAtom } from "../atoms/projectAtom"
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { calculateTotalTimePerDay, formatDateTime, formatReportDateTime } from "./FormatData";
+import { calculateTotalTimePerDay, formatReportDateTime } from "./FormatData";
 
 
 function getTimers(projectId) {

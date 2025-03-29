@@ -22,7 +22,6 @@ const [taskList, setTaskList] = useAtom(taskListAtom);
 const [loading, setLoading] = useState(true);
 const [stopDate, setStopDate] = useState(null);
 
-// Consider changing to this pattern instead
 const [uiState, setUiState] = useState({
     taskDeadlineToggle: false,
     taskDeadlineItem: 0,
