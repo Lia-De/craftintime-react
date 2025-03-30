@@ -10,8 +10,6 @@ import { AddNewItemForm } from '../components/AddNewItemForm';
 import { formatTimeSpan } from '../components/FormatData';
 import { DeleteProject } from '../components/DeleteDBItem';
 
-
-
 export function Project(){
 
 const [projectList, setProjectList] = useAtom(projectListAtom);
@@ -20,8 +18,7 @@ const [showProject, setShowProject] = useAtom(showDetailAtom);
 const [addItemForm, setAddItemForm] = useState(false);
 const [serverError, setServerError] = useState(false);
 
-// On load, fetch all projects. 
-// If we get sent here from tags (showProject is true) - then we want to display one project
+
 useEffect(() => {
     if (!showProject){
         axios.get('/api/Project')
@@ -64,7 +61,7 @@ useEffect(() => {
         </div>
         )
     }
-    if (showProject) {
+    if (!serverError && showProject) {
              return <ProjectDetailView />
     } else {
     return (
