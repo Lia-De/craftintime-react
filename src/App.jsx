@@ -4,7 +4,7 @@ import { Layout } from './components/Layout.jsx'
 import { Home } from './pages/Home.jsx'
 import { Project } from './pages/Project.jsx'
 import { Tag } from './pages/Tag.jsx'
-import { HashRouter as Router } from "react-router-dom";
+import { HashRouter  } from 'react-router'
 
 function App() {
   
