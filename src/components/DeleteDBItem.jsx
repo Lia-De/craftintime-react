@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { tagListAtom } from "../atoms/tagListAtom";
 import { projectListAtom } from "../atoms/projectListAtom";
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const DeleteTag = ({tagToDelete}) => {
     const [tagList, setTagList] = useAtom(tagListAtom);
@@ -17,7 +17,7 @@ export const DeleteTag = ({tagToDelete}) => {
         deleteData && axios(
             {
                 method: 'delete',
-                url:  `/api/Tag/deleteTag`,
+                url:  `${API_BASE_URL}/Tag/deleteTag`,
                 data: deleteData,
                 headers: {"Content-Type": "application/json",}
             })
@@ -52,7 +52,7 @@ export const DeleteProject = ({projectToDelete}) =>{
         deleteData && axios(
             {
                 method: 'delete',
-                url:  `/api/Project/deleteProject`,
+                url:  `${API_BASE_URL}/Project/deleteProject`,
                 data: deleteData,
                 headers: {"Content-Type": "application/json",}
             })

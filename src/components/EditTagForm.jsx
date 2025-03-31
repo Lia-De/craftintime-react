@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { tagAtom } from "../atoms/tagAtom";
 import axios from "axios";
 import { tagListAtom } from "../atoms/tagListAtom";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const EditTagForm = ({editTag, setShowEdit}) => {
     const {register, handleSubmit, formState:{errors}} = useForm();
@@ -11,7 +12,7 @@ export const EditTagForm = ({editTag, setShowEdit}) => {
 
     const onSubmit = (data) =>{
         data = {...data, tagId: tag.tagId};
-        axios.post('/api/Tag/updateTag', data)
+        axios.post(`${API_BASE_URL}/Tag/updateTag`, data)
         .then((response)=> {
             if (response.status===200){
                 setTag(prev => ({...prev, name:data.name}));

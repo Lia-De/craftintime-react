@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { PopulatedStatusList } from "./FormatData";
 import { taskListAtom } from "../atoms/taskListAtom";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const EditProject = ({setUiState}) => {
     const [project, setProject] = useAtom(projectAtom);
@@ -24,7 +25,7 @@ export const EditProject = ({setUiState}) => {
 
     useEffect(()=> {
         editObject && 
-        axios.post('/api/Project/updateProject',editObject, {headers: {"Content-Type": "application/json",}})
+        axios.post(`${API_BASE_URL}/Project/updateProject`,editObject, {headers: {"Content-Type": "application/json",}})
         .then(response=>{
             response.data && setProject(response.data);
             setUiState(prev => ({...prev, editing: false}))
@@ -36,7 +37,7 @@ export const EditProject = ({setUiState}) => {
         confirm(`Are you sure you want to delete ${task.name}?`, 'Yes','Cancel') && 
         axios({
                 method: 'delete',
-                url:  `/api/Task/deleteTask`,
+                url:  `${API_BASE_URL}/Task/deleteTask`,
                 data: task,
                 headers: {"Content-Type": "application/json",}
               })
@@ -51,7 +52,7 @@ export const EditProject = ({setUiState}) => {
     }
 
     const confirmRemoveTag = (tag) => {
-        axios.post(`/api/Project/removeTag/${project.projectId}/${tag.tagId}`)
+        axios.post(`${API_BASE_URL}/Project/removeTag/${project.projectId}/${tag.tagId}`)
         .catch(e => {console.log(e)}).finally(()=>{
             setProject(prev => ({
                 ...prev,

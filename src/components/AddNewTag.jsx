@@ -2,9 +2,8 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { tagListAtom } from "../atoms/tagListAtom";
-import { tagAtom } from "../atoms/tagAtom";
 import axios from "axios";
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const AddNewTag = ( ) => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
@@ -18,7 +17,7 @@ export const AddNewTag = ( ) => {
     };
 
     useEffect(()=> {
-        newTag && axios.post('/api/Tag/addTag', newTag)
+        newTag && axios.post(`${API_BASE_URL}/Tag/addTag`, newTag)
         .then(response => {
             
             setTagList(prev =>( [...prev, response.data] ));

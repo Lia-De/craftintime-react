@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useForm } from "react-hook-form";
 import { useAtom } from 'jotai';
 import { projectAtom } from '../atoms/projectAtom';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const ApplyTimer = ({ setUiState, date}) => {
     const [project, setProject] = useAtom(projectAtom);
@@ -22,7 +23,7 @@ export const ApplyTimer = ({ setUiState, date}) => {
           };
           
           try{ 
-            await axios.post(`/api/Project/stopTimer/${dataToSend.projectId}/${dataToSend.taskId}`,
+            await axios.post(`${API_BASE_URL}/Project/stopTimer/${dataToSend.projectId}/${dataToSend.taskId}`,
               dataToSend,
                {headers: {"Content-Type": "application/json",}}
               )

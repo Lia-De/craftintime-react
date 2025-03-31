@@ -3,11 +3,11 @@ import { useAtomValue } from "jotai"
 import { projectAtom } from "../atoms/projectAtom"
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { calculateTotalTimePerDay, formatDateTime, formatReportDateTime } from "./FormatData";
-
+import { calculateTotalTimePerDay, formatReportDateTime } from "./FormatData";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function getTimers(projectId) {
-    return axios.get(`/api/Project/getProjectTimers/${projectId}`)
+    return axios.get(`${API_BASE_URL}/Project/getProjectTimers/${projectId}`)
     .then(response => response.data)
     .catch(error => {
         console.log(error);

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useAtom } from "jotai";
 import { projectAtom } from "../atoms/projectAtom";
 import { taskListAtom } from "../atoms/taskListAtom";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const AddNewItemForm = ({setAddItemForm, setProject, setShowProject}) => {
     const { register, handleSubmit, reset, formState:{errors} } = useForm();
@@ -18,7 +19,7 @@ export const AddNewItemForm = ({setAddItemForm, setProject, setShowProject}) => 
     // When the user submits the form - send new user to backend
     useEffect(()=> {
         if (newProject!= null) {
-            newProject && axios.post(`/api/Project/addProject`, newProject, {
+            newProject && axios.post(`${API_BASE_URL}/Project/addProject`, newProject, {
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -65,7 +66,7 @@ export const AddNewTaskForm = ({setUiState}) =>{
         reset();
     }
     useEffect(() => {
-        (newTask!=null) && axios.post('/api/Task/addTask',newTask, {
+        (newTask!=null) && axios.post(`${API_BASE_URL}/Task/addTask`, newTask, {
             headers: {
                 "Content-Type": "application/json",
             },

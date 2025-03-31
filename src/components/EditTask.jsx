@@ -3,10 +3,11 @@ import { useForm } from "react-hook-form";
 import { PopulatedStatusList } from "./FormatData";
 import { useAtom } from "jotai";
 import { taskListAtom } from "../atoms/taskListAtom";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // API Call
 function sendEdit(updatedTask) {
-    return axios.post('/api/Task/updateTask', updatedTask, {
+    return axios.post(`${API_BASE_URL}/Task/updateTask`, updatedTask, {
         headers: { "Content-Type": "application/json" },
     })
     .then(response => response.data)
@@ -42,7 +43,7 @@ async function handleTaskUpdate(data, task, setTaskList, callback) {
 }
 
 const confirmRemoveTag =  (tag, task, callback) => {
-    axios.post(`/api/Task/removeTag/${task.taskId}/${tag.tagId}`)
+    axios.post(`${API_BASE_URL}/Task/removeTag/${task.taskId}/${tag.tagId}`)
     .then((result=> callback(result.data)))
     .catch(e => {console.log(e)}).finally(()=>{})
 }

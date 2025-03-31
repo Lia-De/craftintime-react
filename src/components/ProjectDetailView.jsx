@@ -76,7 +76,7 @@ function toggleTimer(){
             startTimer: true
         }));
         setStopDate(null);
-        axios.post(`/api/Project/startTimer/${project.projectId}`,timerData, {
+        axios.post(`${API_BASE_URL}/Project/startTimer/${project.projectId}`,timerData, {
             headers: {
                 "Content-Type": "application/json",
             },

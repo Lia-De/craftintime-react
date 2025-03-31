@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { projectAtom } from "../atoms/projectAtom";
 import { taskAtom } from "../atoms/taskAtom";
 import axios from "axios";
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function formatTagArray(taglist){
     return taglist.split(',')
@@ -18,7 +18,7 @@ export const AddTagToProject = () => {
     const onSubmit = async (data) => {
         let tagArray = formatTagArray(data.tags);
 
-        await axios.post(`/api/Project/addTagsToProject/${project.projectId}`, 
+        await axios.post(`${API_BASE_URL}/Project/addTagsToProject/${project.projectId}`, 
                     tagArray,
                     {headers: {"Content-Type": "application/json",}}
             )
@@ -54,7 +54,7 @@ export const AddTagToTask = ({taskToEdit}) => {
 
     const onSubmit = (data)=> {
         let tagArray = formatTagArray(data.tags);
-        axios.post(`/api/Task/addTagsToTask/${taskToEdit}`, 
+        axios.post(`${API_BASE_URL}/Task/addTagsToTask/${taskToEdit}`, 
             tagArray,
             {headers: {"Content-Type": "application/json",}}
         )

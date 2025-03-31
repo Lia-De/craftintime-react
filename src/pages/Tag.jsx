@@ -9,8 +9,9 @@ import { projectAtom } from "../atoms/projectAtom";
 import { showDetailAtom } from "../atoms/showDetailAtom";
 
 import { AddNewTag } from "../components/AddNewTag";
-import { DeleteTag } from "../components/DeleteDBITem";
+import { DeleteTag } from "../components/DeleteDBItem";
 import { EditTagForm } from "../components/EditTagForm";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export function Tag(){
     const [tagList, setTagList]= useAtom(tagListAtom);
@@ -23,7 +24,7 @@ export function Tag(){
     
 
     useEffect(() => {
-        axios.get(`/api/Tag`)
+        axios.get(`${API_BASE_URL}/Tag`)
             .then(response => {
                 setTagList(response.data);
                 setShowDetail(false);
@@ -37,7 +38,7 @@ export function Tag(){
 
     useEffect(()=> {
             showTag!=null && 
-            axios.get(`/api/Tag/getSingleTag/${showTag.tagId}`)
+            axios.get(`${API_BASE_URL}/Tag/getSingleTag/${showTag.tagId}`)
             .then(response => {
                 setTag(response.data)
                 setShowDetail(true);
