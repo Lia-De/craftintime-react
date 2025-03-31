@@ -151,7 +151,7 @@ button:hover {
   width: 2em;
 }
 .editButton {
-  background-image: url('/craftintime-react/img/edit.png');
+  background-image: url('../img/edit.png');
   margin:auto 1em auto 1em;
 
 }
@@ -243,7 +243,7 @@ div.selected, div.active {
 }
 
 p.status0 {  /* Planning */
-  background-image: url('./img/pending_20dp.png');
+  background-image: url('../img/pending_20dp.png');
 }
 p.status1 {  /* Active */
   width: 20px;
@@ -254,12 +254,12 @@ p.status1 {  /* Active */
 }
 
 p.status2 { /* inactive */
-  background-image: url('./img/pause_circle_20dp.png');
+  background-image: url('../img/pause_circle_20dp.png');
 }
 p.status3 { /* Completed */
   border-radius: 50%;
   background-color: var(--mainSelected);
-  background-image: url('./img/done.png');
+  background-image: url('../img/done.png');
   background-size: 20px;
   width: 20px;
   height: 20px;
@@ -275,7 +275,7 @@ div[id^="detail"] > div.header > p[class^="status"]{
 }
 
 .totalTime {
-  background-image: url('./img/schedule_20dp_ADADAD.png');
+  background-image: url('../img/schedule_20dp_ADADAD.png');
   background-size: contain;
   background-position: left;
   background-repeat: no-repeat;
@@ -290,7 +290,7 @@ div[id^="detail"] > div.header > p[class^="status"]{
   width: 1.8rem;
 }
 p.deadline {
-  background-image: url('./img/calendar_clock_20dp.png');
+  background-image: url('../img/calendar_clock_20dp.png');
   background-size: contain;
   background-position: left;
   background-repeat: no-repeat;
@@ -299,7 +299,7 @@ p.deadline {
   padding-left: 22px;
 }
 p.noDeadline {
-  background-image: url('./img/calendar_add_on_20dp.png');
+  background-image: url('../img/calendar_add_on_20dp.png');
   background-size: contain;
   background-position: left;
   background-repeat: no-repeat;
@@ -328,7 +328,7 @@ p.noDeadline:hover {
 [id^=timer] {
   display: inline-block;
   color: transparent;
-  background-image: url('./img/timer_play_50dp_F5F5F5.png');
+  background-image: url('../img/timer_play_50dp_F5F5F5.png');
   background-color: var(--greySelected);
   background-size: 30px;
   background-position: center;
@@ -343,7 +343,7 @@ p.noDeadline:hover {
 }
 
 #timerStart.running {
-  background-image: url('./img/timer_off_50dp_F5F5F5.png');
+  background-image: url('../img/timer_off_50dp_F5F5F5.png');
   background-color: var(--mainSelected);
   border-color: var(--mainSelected);
   animation: pulseBgColor 3s infinite ease-in-out;
@@ -362,7 +362,7 @@ p.noDeadline:hover {
   100% { border:1px solid var(--mainGreen); }
 }
 p.totalTime.runningTimer {
-  background-image: url('./img/timer_play_20dp_223602.png');
+  background-image: url('../img/timer_play_20dp_223602.png');
   background-size:25px;
   width: 30px;
   height: 30px;
@@ -382,7 +382,7 @@ ul.tagsList  {
 ul.tagsList > li {
   list-style: none;
   padding: 0.3em 15px 0.3em 25px;
-  background-image: url('./img/tag-outline.png');
+  background-image: url('../img/tag-outline.png');
   background-repeat: no-repeat;
   background-position: left center;
   background-size: 20px;
@@ -412,7 +412,7 @@ div.tagsList{
   color:transparent;
   background-color: var(--greyMain);
   border: unset;
-  background-image: url('./img/tag-plus-outline.png');
+  background-image: url('../img/tag-plus-outline.png');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 20px;
@@ -444,7 +444,7 @@ form >p.errorMessage {
   margin-top:0;
 }
 p.deleteTask, p.deleteTag {
-  background-image: url('./img/tag-remove.png');
+  background-image: url('../img/tag-remove.png');
   background-repeat: no-repeat;
   background-position: left center;
   background-size: 20px;
@@ -458,7 +458,7 @@ p.deleteTask, p.deleteTag {
   border-radius: 3px;
 }
 p.deleteTag {
-  background-image: url('./img/tag-remove-outline.png');
+  background-image: url('../img/tag-remove-outline.png');
 }
 /* Styling for form for choosing which task to apply a timer to */
 form#chooseTaskForm {
