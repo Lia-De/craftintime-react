@@ -22,7 +22,7 @@ const [serverError, setServerError] = useState(false);
 
 useEffect(() => {
     if (!showProject){
-        axios.get("https://craftintimeapi-cre5hhfuhudvajac.swedencentral-01.azurewebsites.net/Project")
+        axios.get("https://craftintimeapi.azure-api.net/Project")
                 .then(response => {
                     setProjectList(response.data);
                     setProject(null);
