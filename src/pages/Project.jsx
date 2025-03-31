@@ -9,6 +9,7 @@ import { ProjectDetailView } from '../components/ProjectDetailView';
 import { AddNewItemForm } from '../components/AddNewItemForm';
 import { formatTimeSpan } from '../components/FormatData';
 import { DeleteProject } from '../components/DeleteDBItem';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export function Project(){
 
@@ -21,7 +22,7 @@ const [serverError, setServerError] = useState(false);
 
 useEffect(() => {
     if (!showProject){
-        axios.get('/api/Project')
+        axios.get(`${API_BASE_URL}/Project`)
                 .then(response => {
                     setProjectList(response.data);
                     setProject(null);
