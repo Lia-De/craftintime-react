@@ -3,7 +3,8 @@
   "appName": "Craft In Time",
   "webDir": "dist",
   "server": {
-    "url": "https://craftintimeapi-cre5hhfuhudvajac.swedencentral-01.azurewebsites.net",
-    "cleartext": true
+    "androidScheme": "https",
+    "hostname" : "https://craftintimeapi-cre5hhfuhudvajac.swedencentral-01.azurewebsites.net"
+    
   }
 }
