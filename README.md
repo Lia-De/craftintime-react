@@ -4,6 +4,13 @@ Created 2025-01-08 as part of Lexicon course, fullstack C# developer.
 ## 2025-03-23 - 2025-03-31 - Refactored the whole app to REACT and Published on GitHub pages
 Fully functioning Demo of the project launched on GitHub Pages, the backend hosted on Azure, API and SQL Servers running.
 
+### Possible features to add
+- [ ] Manually add time to a project/task
+- [ ] When stopping a timer, add ability to add a task to apply it to
+- [ ] Editing a timer when stopping it - if you forgot to start a timer until you've worked for 20 mins, say
+- [ ] Add link back to the project belonging to the Task a tag is applied to, not just if a tag applies to a Project directly
+- [ ] Add tracking of status changed maybe?
+
 ## Refactoring to use React Starting March 23 - Old codebase kept up to date in its own repo
 [Pure javascript/css version of Craft in Time](https://github.com/Lia-De/ToDoList)
 
