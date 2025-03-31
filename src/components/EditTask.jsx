@@ -71,7 +71,7 @@ export const EditTask = ({ task, setUiState }) => {
                 
                 <PopulatedStatusList item={task} register={register} />
                 
-                {task.tags.length>0 && (<><p className="span2">Click to remove Tasks or Tags</p>
+                {task.tags.length>0 && (<><p className="span2">Click to remove Tags</p>
                 <label>Tags:</label>
                 <div id="editProjectTags">
                     {task.tags.map(tag => {
