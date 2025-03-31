@@ -70,7 +70,9 @@ export const EditTask = ({ task, setUiState }) => {
                 <textarea id="description" rows="5" defaultValue={task.description} {...register('description')} />
                 
                 <PopulatedStatusList item={task} register={register} />
-                {task.tags.length>0 && (<><label>Tags:</label>
+                
+                {task.tags.length>0 && (<><p className="span2">Click to remove Tasks or Tags</p>
+                <label>Tags:</label>
                 <div id="editProjectTags">
                     {task.tags.map(tag => {
                         return <p key={tag.tagId} 
