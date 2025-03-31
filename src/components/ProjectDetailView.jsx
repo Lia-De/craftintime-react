@@ -13,6 +13,7 @@ import { EditTask, EditTaskDeadline } from './EditTask';
 import { AddNewTaskForm } from './AddNewItemForm';
 import clsx from 'classnames';
 import { TimeReport } from './TimeReport';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 
 export const ProjectDetailView = () => {
@@ -40,7 +41,7 @@ const [uiState, setUiState] = useState({
 //  Also check if it has a timer running.
     useEffect(()=>{
         setLoading(true);
-        axios.get(`/api/Project/getSingleProject/${project.projectId}`)    
+        axios.get(`${API_BASE_URL}/Project/getSingleProject/${project.projectId}`)    
         .then(response => {
             setProject(response.data);
             setTaskList(response.data.tasks);
