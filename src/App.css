@@ -151,7 +151,7 @@ button:hover {
   width: 2em;
 }
 .editButton {
-  background-image: url('./img/edit.png');
+  background-image: url('/craftintime-react/img/edit.png');
   margin:auto 1em auto 1em;
 
 }
