@@ -109,7 +109,7 @@ function toggleTimer(){
             {uiState.editing && <EditProject setUiState={setUiState}  />}
             
             <div className="header">
-                <p className={project?.status ? `status${project?.status}`:undefined}>
+                <p className={`status${project?.status}`}>
                     {statusLabels[project?.status] || ""}</p>
                 <p className="totalTime" 
                     onClick={()=>{setUiState((prev)=> 
