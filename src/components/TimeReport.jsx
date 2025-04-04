@@ -15,32 +15,34 @@ function getTimers(projectId) {
     });
 }
 
-const DateReport = ({timers, taskList, setTwoColumn}) => {
+function getTaskNames(taskList, timerTaskIds) {
+    return timerTaskIds.map(id => {
+            const task = taskList.find(task => task.taskId === id);
+            return task ? he.decode(task.name) : 'Project'; 
+        })
+        .join(", ");
+}
+const DateReport = ({timers, taskList}) => {
     const project = useAtomValue(projectAtom);
     let collated = calculateTotalTimePerDay(timers);
-        // setTwoColumn(collated.length>20);
-    function getTaskNames(timerTaskIds) {
-        return timerTaskIds
-            .map(id => {
-                const task = taskList.find(task => task.taskId === id);
-                return task ? he.decode(task.name) : 'Project'; // Replace with name or "Unknown Task" if not found
-            })
-            .join(", ");
-    }
 
    return collated.map( item => {
         return (<p key={item.date}>
-                <strong>{item.date+': '}{item.totalTime + ' '}</strong> 
-                Working on tasks: {getTaskNames(item.tasks)}
+                {item.date+': '} <strong>{item.totalTime + ' '}</strong> 
+                Working on tasks: {getTaskNames(taskList, item.tasks)}
                 </p>)
       })
 }
 
-const FullTimeReport = ({timers}) => {
+const FullTimeReport = ({timers, taskList}) => {
+
     return  (<>
         {timers.map( timer => {
         return (
-        <p key={timer.startDate}>{formatReportDateTime(timer.startDate, timer.endDate)}</p>
+        <p key={timer.startDate}>
+            <strong>{he.decode(getTaskNames(taskList, [timer.taskId]))+ ' '}</strong>
+            {formatReportDateTime(timer.startDate, timer.endDate)} 
+            </p>
         )})}
         </>
         )
@@ -76,7 +78,7 @@ export const TimeReport = () => {
             
             <div id="dateDetails" className={twoColumn ? "grid-container" : "single-column"}>
             {collate && <DateReport timers={timers} taskList={project.tasks} setTwoColumn={setTwoColumn}/>}
-            {!collate && <FullTimeReport timers={timers} />}
+            {!collate && <FullTimeReport timers={timers} taskList={project.tasks} />}
             </div>
         </div>
     )
