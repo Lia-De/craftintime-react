@@ -68,7 +68,7 @@ useEffect(() => {
     return (
         <>
         <div className="header">
-             <h2 id="nowShowing">{titleFormat()}</h2>
+             <h2 id="nowShowing">{titleFormat()} Craft In Time</h2>
         </div>
         <div id="contents">
             <div id="addNewItem" className={addItemForm ? 'shadowbox':undefined}>
